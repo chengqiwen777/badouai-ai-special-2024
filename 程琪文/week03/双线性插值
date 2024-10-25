@@ -1,0 +1,44 @@
+import cv2
+import numpy as np
+
+
+def bilinear_interpolation(img):
+    src_h, src_w, src_c = img.shape
+    dst_h, dst_w = (800, 800)
+    if src_h == dst_h and src_w == dst_w:
+        return img.copy()
+
+    new_img = np.zeros((dst_h, dst_w, src_c), np.uint8)
+    scale_x = float(src_w) / dst_w
+    scale_y = float(src_h) / dst_h
+
+    for i in range(src_c):
+        for y in range(dst_h):
+            for x in range(dst_w):
+                # 中心对齐
+                src_x = (x + 0.5) * scale_x - 0.5
+                src_y = (y + 0.5) * scale_y - 0.5
+
+
+                src_x0 = int(src_x)
+                src_y0 = int(src_y)
+                # 边界处理
+                src_x1 = min(src_x0 + 1, src_w - 1)
+                src_y1 = min(src_y0 + 1, src_h - 1)
+
+                temp0 = (src_x1 - src_x) * img[src_y0, src_x0, i] + (src_x - src_x0) * img[src_y0, src_x1, i]
+                temp1 = (src_x1 - src_x) * img[src_y1, src_x0, i] + (src_x - src_x0) * img[src_y1, src_x1, i]
+                new_img[y, x, i] = int((src_y1 - src_y) * temp0 + (src_y - src_y0) * temp1)
+
+    return new_img
+
+
+
+if __name__ == '__main__':
+    img = cv2.imread('lenna.png')
+    new_img = bilinear_interpolation(img)
+    api_img = cv2.resize(img, (800,800), interpolation=cv2.INTER_LINEAR)
+    cv2.imshow('new_img', new_img)
+    cv2.imshow('img', img)
+    cv2.imshow('api_img', api_img)
+    cv2.waitKey(0)
