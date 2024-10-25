@@ -1,0 +1,14 @@
+import cv2
+import numpy as np
+from PIL import Image
+from skimage import util
+
+img = cv2.imread('lenna.png', 0)
+noise_img = util.random_noise(img, mode='poisson')
+
+cv2.imshow('img', img)
+cv2.imshow('noise_img', noise_img)
+
+cv2.waitKey(0)
+
+
