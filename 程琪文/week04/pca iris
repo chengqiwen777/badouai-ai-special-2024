@@ -1,0 +1,32 @@
+import matplotlib.pyplot as plt
+import sklearn.decomposition as dp
+from sklearn.datasets import load_iris
+
+x, y = load_iris(return_X_y=True)
+
+pca = dp.PCA(n_components=2)
+pca.fit(x)
+new_x = pca.transform(x)
+
+red_x, red_y = [], []
+blue_x, blue_y = [], []
+green_x, green_y = [], []
+
+for i in range(len(new_x)):
+    if y[i] == 0:
+        red_x.append(new_x[i][0])
+        red_y.append(new_x[i][1])
+    elif y[i] == 1:
+        blue_x.append(new_x[i][0])
+        blue_y.append(new_x[i][1])
+    else:
+        green_x.append(new_x[i][0])
+        green_y.append(new_x[i][1])
+
+
+plt.scatter(red_x, red_y, c='red', marker='o')
+plt.scatter(blue_x, blue_y, c='blue', marker='x')
+plt.scatter(green_x, green_y, c='green', marker='^')
+
+
+plt.show()
