@@ -1,0 +1,35 @@
+import cv2
+import numpy as np
+
+def nearest_interpolation(image):
+    height, width, channel = image.shape
+    newImage = np.zeros((800, 800, channel), np.uint8)
+    sh = 800/height
+    sw = 800/width
+
+    for i in range(newImage.shape[0]):
+        for j in range(newImage.shape[1]):
+            x = int(i/sh + 0.5)
+            y = int(j/sw + 0.5)
+
+            # 边界处理
+            x = min(x, image.shape[0] - 1)
+            y = min(y, image.shape[1] - 1)
+
+            newImage[i, j] = image[x, y]
+
+    return newImage
+
+
+
+
+img = cv2.imread('lenna.png', 1)
+newImg = nearest_interpolation(img)
+api_img = cv2.resize(img, (800, 800), interpolation=cv2.INTER_NEAREST)
+
+print(f'newImg的shape: {newImg.shape}')
+print(f'newImg的shape: {api_img.shape}')
+cv2.imshow('img', img)
+cv2.imshow('newImg', newImg)
+cv2.imshow('api_img', api_img)
+cv2.waitKey(0)
