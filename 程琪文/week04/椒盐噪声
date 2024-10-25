@@ -1,0 +1,29 @@
+import random
+import cv2
+import numpy as np
+
+
+def func1(img, snr):
+    noiseImg = img.copy()
+    h, w = img.shape[:2]
+    noiseNum = int(snr * h * w)
+
+    for i in range(noiseNum):
+        randX = np.random.randint(0, w-1)
+        randY = np.random.randint(0, h-1)
+
+        if random.random() < 0.5:
+            noiseImg[randY, randX] = 255
+        else:
+            noiseImg[randY, randX] = 0
+
+    return noiseImg
+
+
+
+if __name__ == '__main__':
+    img = cv2.imread('lenna.png', 0)
+    noise_img = func1(img, 0.1)
+    cv2.imshow('img', img)
+    cv2.imshow('noise_img', noise_img)
+    cv2.waitKey(0)
