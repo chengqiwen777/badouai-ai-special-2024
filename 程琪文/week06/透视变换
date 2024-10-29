@@ -1,0 +1,24 @@
+import cv2
+import numpy as np
+
+
+img = cv2.imread('photo1.jpg')
+print(img.shape)
+
+img_new = img.copy()
+print(img_new.shape)
+
+src = np.float32([[207, 151], [517, 285], [17, 601], [343, 731]])
+dst = np.float32([[0, 0], [337, 0], [0, 488], [337, 488]])
+
+warpMatrix = cv2.getPerspectiveTransform(src, dst)
+print("warp matrix", warpMatrix)
+
+# img_new = cv2.warpPerspective(img, warpMatrix, (img.shape[0], img.shape[1]))
+img_new = cv2.warpPerspective(img, warpMatrix, (337, 488))
+print(img_new.shape)
+
+cv2.imshow('img', img)
+cv2.imshow('img_new', img_new)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
