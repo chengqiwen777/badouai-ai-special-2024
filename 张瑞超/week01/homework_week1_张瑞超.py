@@ -1,1 +1,0 @@
-# No homework this week
